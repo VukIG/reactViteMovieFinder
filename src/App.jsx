@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import SearchIcon from './assets/search.svg'
+import Movie from './Movie'
 
 const API_URL='http://www.omdbapi.com?apikey=71487580';
 
@@ -12,6 +13,7 @@ function App() {
     const response = await fetch(`${API_URL}&s=${name}`);
     const data = await response.json();
     console.log(data.Search);
+    setMovies(data.Search);
   }
 
   useEffect(()=>{
@@ -29,11 +31,27 @@ function App() {
             setSearchTerm(e.target.value);
           }}
         />
-        <img src={SearchIcon} onClick={()=>{}} />
+        <img src={SearchIcon} 
+          onClick={()=>{
+            searchMovies(searchTerm);
+          }} 
+        />
       </div>
-      <div className="container">
-        
-      </div>
+      {
+        movies?.length > 0 ? (
+          <div className="container">
+            {
+              movies.map((movie)=>{
+                <Movie movie={movie} />
+              })
+            }
+          </div>
+        ) : (
+          <div className="empty">
+            <h2>No movies found</h2>
+          </div>
+        )
+      }
     </div>
   )
 }
